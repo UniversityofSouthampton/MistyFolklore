@@ -5,6 +5,14 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public float speed  = 2;
+    public float gravity = -9.81f;
+    private bool isGrounded;
+    public LayerMask Ground;
+    public Transform player;
+    float horizontal;
+    float vertical;
+    Vector3 velocity;
+    public float jumpHeight;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,26 +22,25 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        isGrounded = Physics.Raycast(player.position, Vector3.down, 0.3f, Ground);
+        Debug.Log(isGrounded);
         var characterController = GetComponent<CharacterController>();
-        Vector3 velocity = Vector3.zero;
-        if (Input.GetKey(KeyCode.W))
+        //Vector3 velocity = Vector3.zero;
+        horizontal = Input.GetAxisRaw("Horizontal");
+        vertical = Input.GetAxisRaw("Vertical");
+        Vector3 movement = transform.right * horizontal + transform.forward * vertical;
+        characterController.Move(movement.normalized * speed * Time.deltaTime);
+         if (isGrounded && Input.GetKey(KeyCode.Space))
         {
-            velocity += transform.forward;
+            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
-        if (Input.GetKey(KeyCode.S))
+        if (isGrounded && velocity.y < 0)
         {
-            velocity -= transform.forward;
+            velocity.y = -1f;
         }
-        if (Input.GetKey(KeyCode.A))
-        {
-            velocity -= transform.right;
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            velocity += transform.right;
-        }
+        velocity.y += gravity * Time.deltaTime;
         
-        characterController.SimpleMove(velocity * speed);
+        characterController.Move(velocity * Time.deltaTime);
     }
 
    
