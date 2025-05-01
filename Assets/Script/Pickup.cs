@@ -18,6 +18,7 @@ public class Pickup : MonoBehaviour
     private Rigidbody rb;
 
     private Vector3 startPos ,endPos, objectPos;
+    float rotationSensitivity = 5f;
 
   
 
@@ -46,8 +47,6 @@ public class Pickup : MonoBehaviour
             isHolding = true;
             rb.useGravity = false;
             rb.detectCollisions = true;
-            startTime = Time.time;
-            startPos = this.transform.position;
             this.transform.SetParent(tempParent.transform);
            
         }
@@ -73,9 +72,27 @@ public class Pickup : MonoBehaviour
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetKey(KeyCode.F))
+        {
+            float XaxisRotation = 1f;
+            //float YaxisRotation = 5f;
+            transform.Rotate(Vector3.down , XaxisRotation);
+            //transform.Rotate(Vector3.right, YaxisRotation);
+        }
+        if (Input.GetKey(KeyCode.Q))
+        {
+            //float XaxisRotation = 1f;
+            float YaxisRotation = 1f;
+            //transform.Rotate(Vector3.down , XaxisRotation);
+            transform.Rotate(Vector3.right, YaxisRotation);
+        }
+        
+        if (Input.GetKeyDown(KeyCode.E))
         {
             //throw
+            Drop();
+            rb.AddForce(tempParent.transform.forward * throwForce, ForceMode.Force);
+            
         }
 
     }
@@ -84,15 +101,12 @@ public class Pickup : MonoBehaviour
     {
         if (isHolding)
         {
-            endTime = Time.time;
-            timeInterval = endTime - startTime;
             isHolding = false;
             objectPos = this.transform.position;
             this.transform.position = objectPos;
             this.transform.SetParent(null);
-            endPos = this.transform.position;
             rb.useGravity = true;
-            rb.AddForce ((endPos-startPos).normalized * throwForce/timeInterval, ForceMode.Impulse);
+            
         }
     }
 }
