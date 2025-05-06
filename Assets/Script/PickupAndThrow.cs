@@ -20,11 +20,13 @@ public class PickupAndThrow : MonoBehaviour
     public LayerMask obj_mask;
 
     private Vector3 startPos ,endPos, objectPos;
-    float rotationSensitivity = 5f;
+    //float rotationSensitivity = 5f;
 
     public GameObject player;
     private GameObject pickup_obj;
     private float startTime, endTime, timeInterval;
+
+    private MeshRenderer mr;
     // Start is called before the first frame update
     void Start()
     {
@@ -39,12 +41,15 @@ public class PickupAndThrow : MonoBehaviour
         {
             Hold();
         }
+        
         if (pickup)
         {
             PickingUp();
         }
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, maxDistance, obj_mask) )
         {
+            mr = hit.collider.gameObject.GetComponent<MeshRenderer>();
+            mr.materials[1].SetFloat("_alpha", 1);
             if( Input.GetMouseButtonDown(0))
             {   
                 rb = hit.rigidbody;
@@ -54,12 +59,18 @@ public class PickupAndThrow : MonoBehaviour
             }
             else if( Input.GetMouseButtonUp(0))
             {
+                mr.materials[1].SetFloat("_alpha", 0);
                 Drop();
             }
             
         }
         else if (Input.GetMouseButtonUp(0)){
+            
             Drop();
+        }
+        else if(isHolding == false)
+        {
+            mr.materials[1].SetFloat("_alpha", 0);
         }
         
     }
@@ -110,7 +121,7 @@ public class PickupAndThrow : MonoBehaviour
     {
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-
+        mr.materials[1].SetFloat("_alpha", 1);
         if (Input.GetKey(KeyCode.E))
         {
             float XaxisRotation = 1f;
@@ -152,6 +163,7 @@ public class PickupAndThrow : MonoBehaviour
            pickup_obj.transform.position = objectPos;
            pickup_obj.transform.SetParent(null);
            rb.useGravity = true;
+           mr.materials[1].SetFloat("_alpha", 0);
        }
            
             

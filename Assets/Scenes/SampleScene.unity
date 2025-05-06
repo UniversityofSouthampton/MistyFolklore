@@ -49415,6 +49415,16 @@ PrefabInstance:
       propertyPath: obj_mask.m_Bits
       value: 64
       objectReference: {fileID: 0}
+    - target: {fileID: 7833134030967319557, guid: 205b56cf88c761e4da3e3b4bd2344c6c,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7833134030967319557, guid: 205b56cf88c761e4da3e3b4bd2344c6c,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: cf1e314a17eb04c49b94f3a6faf4dde3, type: 2}
     - target: {fileID: 7961334082324061672, guid: 205b56cf88c761e4da3e3b4bd2344c6c,
         type: 3}
       propertyPath: m_LocalPosition.x
