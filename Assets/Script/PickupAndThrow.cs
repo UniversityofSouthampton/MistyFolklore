@@ -1,11 +1,11 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Pickup : MonoBehaviour
+public class PickupAndThrow : MonoBehaviour
 {
     public static bool isHolding = false;
+    bool pickup;
 
     [SerializeField] private float throwForce = 600f;
 
@@ -16,18 +16,19 @@ public class Pickup : MonoBehaviour
     private TempParent tempParent;
 
     private Rigidbody rb;
+    RaycastHit hit;
     public LayerMask obj_mask;
 
     private Vector3 startPos ,endPos, objectPos;
     float rotationSensitivity = 5f;
 
     public GameObject player;
-
+    private GameObject pickup_obj;
     private float startTime, endTime, timeInterval;
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+       
         tempParent = TempParent.Instance;
     }
 
@@ -38,21 +39,52 @@ public class Pickup : MonoBehaviour
         {
             Hold();
         }
+        if (pickup)
+        {
+            PickingUp();
+        }
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, maxDistance, obj_mask) )
+        {
+            if( Input.GetMouseButtonDown(0))
+            {   
+                rb = hit.rigidbody;
+                pickup_obj = hit.collider.gameObject;
+                isHolding = true;
+                pickup = true;
+            }
+            else if( Input.GetMouseButtonUp(0))
+            {
+                Drop();
+            }
+            
+        }
+        else if (Input.GetMouseButtonUp(0)){
+            Drop();
+        }
+        
     }
 
+    void PickingUp()
+    {
+         rb.useGravity = false;
+         rb.detectCollisions = true;
+         pickup_obj.transform.SetParent(tempParent.transform);
+         //Hold();
+    }
+    /*
     public void OnMouseDown()
     {
         //pickup
         if (tempParent.gameObject != null)
         {
-           
 
             if ( Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, maxDistance, obj_mask))
             {
                 isHolding = true;
+                Rigidbody rb = hit.rigidbody;
                 rb.useGravity = false;
                 rb.detectCollisions = true;
-                this.transform.SetParent(tempParent.transform);
+                hit.transform.SetParent(tempParent.transform);
             }
             
            
@@ -61,18 +93,18 @@ public class Pickup : MonoBehaviour
         {
             Debug.Log("Temp Parent item not found in scene");
         }
-    }
+    }*/
 
-    public void OnMouseUp()
-    {
+    //public void OnMouseUp()
+    //{
         //drop
-        Drop();
-    }
+        //Drop();
+    //}
 
-    private void OnMouseExit()
-    {
+   // private void OnMouseExit()
+    //{
         //drop
-    }
+    //}
 
     private void Hold()
     {
@@ -83,7 +115,7 @@ public class Pickup : MonoBehaviour
         {
             float XaxisRotation = 1f;
             //float YaxisRotation = 5f;
-            transform.Rotate(Vector3.right , XaxisRotation);
+            pickup_obj.transform.Rotate(Vector3.right , XaxisRotation);
             //transform.Rotate(Vector3.right, YaxisRotation);
         }
         if (Input.GetKey(KeyCode.Q))
@@ -91,12 +123,12 @@ public class Pickup : MonoBehaviour
             //float XaxisRotation = 1f;
             float YaxisRotation = 1f;
             //transform.Rotate(Vector3.down , XaxisRotation);
-            transform.Rotate(-Vector3.right, YaxisRotation);
+            pickup_obj.transform.Rotate(-Vector3.right, YaxisRotation);
         }
         if (Input.GetKey(KeyCode.X))
         {
             float ZaxisRotation = 1f;
-            transform.Rotate(Vector3.forward, ZaxisRotation);
+            pickup_obj.transform.Rotate(Vector3.forward, ZaxisRotation);
         }
         
         
@@ -104,7 +136,7 @@ public class Pickup : MonoBehaviour
         {
             //throw
             Drop();
-            rb.AddForce(tempParent.transform.forward * throwForce, ForceMode.Force);
+            rb.AddForce(tempParent.transform.forward * throwForce * 1/Time.timeScale, ForceMode.Force);
             
         }
 
@@ -112,14 +144,17 @@ public class Pickup : MonoBehaviour
 
     private void Drop()
     {
-        if (isHolding)
-        {
-            isHolding = false;
-            objectPos = this.transform.position;
-            this.transform.position = objectPos;
-            this.transform.SetParent(null);
-            rb.useGravity = true;
+       if (isHolding)
+       {
+           pickup = false;
+           isHolding = false;
+           objectPos = pickup_obj.transform.position;
+           pickup_obj.transform.position = objectPos;
+           pickup_obj.transform.SetParent(null);
+           rb.useGravity = true;
+       }
+           
             
-        }
+        
     }
 }

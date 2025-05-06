@@ -7,14 +7,16 @@ public class PlayerController : MonoBehaviour
     public float speed  = 2;
     public float gravity = -9.81f;
     private bool isGrounded;
-    public LayerMask Ground;
+    public LayerMask Ground, jump_obj;
     public Transform player;
     float horizontal;
     float vertical;
     Vector3 velocity;
     public float jumpHeight;
-
+    bool timeChange = true;
     public Timeslow timeslow;
+    /// Audio
+    public AudioSource rain_sound;
     // Start is called before the first frame update
     void Start()
     {
@@ -26,19 +28,32 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            SlowDownTime();
-        }
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            NormalTime();
+            timeChange = !timeChange;
+            if (timeChange == false)
+            {
+                SlowDownTime();
+                
+            }
+            else {
+                NormalTime();
+                
+            }
         }
         Move();
+        if (rain_sound.pitch > 0.1f && timeChange == false)
+         {
+                 rain_sound.pitch -= 0.01f;
+         }
+         else if (rain_sound.pitch < 1f && timeChange == true)
+         {
+             rain_sound.pitch += 0.01f;
+         }
     }
 
     void Move()
     {
        
-        isGrounded = Physics.Raycast(player.position, Vector3.down, 0.4f, Ground);
+        isGrounded = Physics.Raycast(player.position, Vector3.down, 0.25f,Ground | jump_obj);
         Debug.Log(isGrounded);
         var characterController = GetComponent<CharacterController>();
         //Vector3 velocity = Vector3.zero;
