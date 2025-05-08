@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
     public Timeslow timeslow;
     /// Audio
     public AudioSource rain_sound;
+    public AudioSource slowtime_sound;
+    public AudioClip[] music_list;
+    int i = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -32,12 +35,18 @@ public class PlayerController : MonoBehaviour
             if (timeChange == false)
             {
                 SlowDownTime();
-                
+
             }
             else {
                 NormalTime();
                 
             }
+        }
+        if (timeChange == false && Input.GetKey(KeyCode.I))
+        {
+            slowtime_sound.clip = music_list[i];
+            i++;
+            slowtime_sound.Play();
         }
         Move();
         if (rain_sound.pitch > 0.1f && timeChange == false)
@@ -76,12 +85,16 @@ public class PlayerController : MonoBehaviour
 
     public void SlowDownTime()
     {
+        
         timeslow.DoSlowmotion();
+        slowtime_sound.Play();
     }
 
     public void NormalTime()
     {
+        
         timeslow.TurnBack();
+        slowtime_sound.Pause();
     }
 
    
