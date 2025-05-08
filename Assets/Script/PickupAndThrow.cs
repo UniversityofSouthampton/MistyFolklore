@@ -27,6 +27,8 @@ public class PickupAndThrow : MonoBehaviour
     private float startTime, endTime, timeInterval;
 
     private MeshRenderer mr;
+
+    private Animator anim;
     // Start is called before the first frame update
     void Start()
     {
@@ -56,6 +58,7 @@ public class PickupAndThrow : MonoBehaviour
                 pickup_obj = hit.collider.gameObject;
                 isHolding = true;
                 pickup = true;
+                
             }
             else if( Input.GetMouseButtonUp(0))
             {
@@ -141,8 +144,21 @@ public class PickupAndThrow : MonoBehaviour
             float ZaxisRotation = 1f;
             pickup_obj.transform.Rotate(Vector3.forward, ZaxisRotation);
         }
-        
-        
+        anim = pickup_obj.GetComponent<Animator>();
+        if (anim == null)
+        {
+            return;
+        }
+        else
+        {
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                anim.speed = 1 / Time.timeScale;
+                anim.enabled = true;
+                StartCoroutine(Delay());
+            }
+            
+        }
         if (Input.GetMouseButtonDown(1))
         {
             //throw
@@ -153,10 +169,20 @@ public class PickupAndThrow : MonoBehaviour
 
     }
 
+    IEnumerator Delay()
+    {
+        yield return new WaitForSeconds(1.2f);
+        anim.enabled = false;
+        pickup_obj.transform.localPosition = new Vector3(0,0,3);
+    }
+        
+    
+
     private void Drop()
     {
        if (isHolding)
        {
+           
            pickup = false;
            isHolding = false;
            objectPos = pickup_obj.transform.position;
@@ -164,6 +190,7 @@ public class PickupAndThrow : MonoBehaviour
            pickup_obj.transform.SetParent(null);
            rb.useGravity = true;
            mr.materials[1].SetFloat("_alpha", 0);
+           anim.enabled = false;
        }
            
             
