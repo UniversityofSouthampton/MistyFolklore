@@ -32,7 +32,6 @@ public class PickupAndThrow : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-       
         tempParent = TempParent.Instance;
     }
 
@@ -85,41 +84,6 @@ public class PickupAndThrow : MonoBehaviour
          pickup_obj.transform.SetParent(tempParent.transform);
          //Hold();
     }
-    /*
-    public void OnMouseDown()
-    {
-        //pickup
-        if (tempParent.gameObject != null)
-        {
-
-            if ( Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, maxDistance, obj_mask))
-            {
-                isHolding = true;
-                Rigidbody rb = hit.rigidbody;
-                rb.useGravity = false;
-                rb.detectCollisions = true;
-                hit.transform.SetParent(tempParent.transform);
-            }
-            
-           
-        }
-        else
-        {
-            Debug.Log("Temp Parent item not found in scene");
-        }
-    }*/
-
-    //public void OnMouseUp()
-    //{
-        //drop
-        //Drop();
-    //}
-
-   // private void OnMouseExit()
-    //{
-        //drop
-    //}
-
     private void Hold()
     {
         rb.velocity = Vector3.zero;
@@ -145,20 +109,16 @@ public class PickupAndThrow : MonoBehaviour
             pickup_obj.transform.Rotate(Vector3.forward, ZaxisRotation);
         }
         anim = pickup_obj.GetComponent<Animator>();
-        if (anim == null)
-        {
-            return;
-        }
-        else
+        if (anim != null)
         {
             if (Input.GetKeyDown(KeyCode.F))
             {
-                anim.speed = 1 / Time.timeScale;
+                
                 anim.enabled = true;
                 StartCoroutine(Delay());
             }
-            
         }
+       
         if (Input.GetMouseButtonDown(1))
         {
             //throw
@@ -171,7 +131,7 @@ public class PickupAndThrow : MonoBehaviour
 
     IEnumerator Delay()
     {
-        yield return new WaitForSeconds(1.2f);
+        yield return new WaitForSecondsRealtime(1.2f);
         anim.enabled = false;
         pickup_obj.transform.localPosition = new Vector3(0,0,3);
     }
@@ -190,7 +150,11 @@ public class PickupAndThrow : MonoBehaviour
            pickup_obj.transform.SetParent(null);
            rb.useGravity = true;
            mr.materials[1].SetFloat("_alpha", 0);
-           anim.enabled = false;
+           if (anim != null)
+           {
+               anim.enabled = false;
+           }
+           
        }
            
             

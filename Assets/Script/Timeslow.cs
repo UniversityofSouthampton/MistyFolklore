@@ -10,6 +10,7 @@ public class Timeslow : MonoBehaviour
     public ParticleSystem rain;
     ParticleSystem.MainModule rain_main;
     ParticleSystem.Particle[] m_Particles;
+    public Animator animate;
     
     // Start is called before the first frame update
     void Start()
@@ -34,7 +35,8 @@ public class Timeslow : MonoBehaviour
         Time.fixedDeltaTime = Time.timeScale * .02f;
         rain_main.startSizeY = 0.1f;
         rain_main.startSizeX = 0.1f;
-        
+       
+
     }
 
     public void TurnBack()

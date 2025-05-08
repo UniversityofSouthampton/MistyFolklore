@@ -35,7 +35,7 @@ public class PlayerController : MonoBehaviour
             if (timeChange == false)
             {
                 SlowDownTime();
-
+            
             }
             else {
                 NormalTime();
@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour
         horizontal = Input.GetAxisRaw("Horizontal");
         vertical = Input.GetAxisRaw("Vertical");
         Vector3 movement = transform.right * horizontal + transform.forward * vertical;
-        characterController.Move(movement.normalized * speed * Time.deltaTime * 1/Time.timeScale);
+        characterController.Move(movement.normalized * speed * Time.unscaledDeltaTime);
         if (isGrounded && Input.GetKey(KeyCode.Space))
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity );
@@ -80,7 +80,7 @@ public class PlayerController : MonoBehaviour
         }
         velocity.y += gravity * Time.deltaTime * 1/Time.timeScale;
         
-        characterController.Move(velocity * Time.deltaTime * 1/Time.timeScale);
+        characterController.Move(velocity * Time.unscaledDeltaTime);
     }
 
     public void SlowDownTime()
