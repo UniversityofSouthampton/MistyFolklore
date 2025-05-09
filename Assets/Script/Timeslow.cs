@@ -42,7 +42,7 @@ public class Timeslow : MonoBehaviour
     public void TurnBack()
     {
         Time.timeScale = 1;
-        Time.fixedDeltaTime = Time.timeScale * .02f;
+        Time.fixedDeltaTime = Time.timeScale * .01f;
         rain_main.startSizeY = 1f;
     }
 }
