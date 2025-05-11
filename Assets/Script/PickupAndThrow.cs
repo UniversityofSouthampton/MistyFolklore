@@ -15,7 +15,8 @@ public class PickupAndThrow : MonoBehaviour
 
     private TempParent tempParent;
 
-    private Rigidbody rb;
+    private Rigidbody[] rb;
+    private Rigidbody temp_rigid;
     RaycastHit hit;
     public LayerMask obj_mask;
 
@@ -49,11 +50,17 @@ public class PickupAndThrow : MonoBehaviour
         }
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, maxDistance, obj_mask) )
         {
+            
             mr = hit.collider.gameObject.GetComponent<MeshRenderer>();
-            mr.materials[1].SetFloat("_alpha", 1);
+            if (mr != null)
+            {
+                mr.materials[1].SetFloat("_alpha", 1);
+            }
+            
             if( Input.GetMouseButtonDown(0))
-            {   
-                rb = hit.rigidbody;
+            {
+                temp_rigid = hit.rigidbody;
+                rb = hit.collider.gameObject.GetComponentsInChildren<Rigidbody>();
                 pickup_obj = hit.collider.gameObject;
                 isHolding = true;
                 pickup = true;
@@ -61,7 +68,11 @@ public class PickupAndThrow : MonoBehaviour
             }
             else if( Input.GetMouseButtonUp(0))
             {
-                mr.materials[1].SetFloat("_alpha", 0);
+                if (mr != null)
+                {
+                    mr.materials[1].SetFloat("_alpha", 0);
+                }
+               
                 Drop();
             }
             
@@ -72,23 +83,42 @@ public class PickupAndThrow : MonoBehaviour
         }
         else if(isHolding == false)
         {
-            mr.materials[1].SetFloat("_alpha", 0);
+            if (mr != null)
+            {
+                mr.materials[1].SetFloat("_alpha", 0);
+            }
+            
         }
         
     }
 
     void PickingUp()
     {
-         rb.useGravity = false;
-         rb.detectCollisions = true;
+        foreach (var Rigidbodies in rb )
+        {
+            Rigidbodies.useGravity = false;
+            Rigidbodies.detectCollisions = true;
+        }
+         
          pickup_obj.transform.SetParent(tempParent.transform);
          //Hold();
     }
     private void Hold()
     {
-        rb.velocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
-        mr.materials[1].SetFloat("_alpha", 1);
+        foreach (var Rigidbodies in rb)
+        {
+            Rigidbodies.velocity = Vector3.zero;
+            Rigidbodies.angularVelocity = Vector3.zero;
+        }
+
+        //temp_rigid.constraints = RigidbodyConstraints.FreezePositionY;
+        
+
+        if (mr != null)
+        {
+            mr.materials[1].SetFloat("_alpha", 1);
+        }
+        
         if (Input.GetKey(KeyCode.E))
         {
             float XaxisRotation = 1f;
@@ -123,7 +153,7 @@ public class PickupAndThrow : MonoBehaviour
         {
             //throw
             Drop();
-            rb.AddForce(tempParent.transform.forward * throwForce * 1/Time.timeScale, ForceMode.Force);
+            temp_rigid.AddForce(tempParent.transform.forward * throwForce * 1/Time.timeScale, ForceMode.Force);
             
         }
 
@@ -142,14 +172,22 @@ public class PickupAndThrow : MonoBehaviour
     {
        if (isHolding)
        {
-           
+           //temp_rigid.constraints = RigidbodyConstraints.None;
            pickup = false;
            isHolding = false;
            objectPos = pickup_obj.transform.position;
            pickup_obj.transform.position = objectPos;
            pickup_obj.transform.SetParent(null);
-           rb.useGravity = true;
-           mr.materials[1].SetFloat("_alpha", 0);
+           foreach (var Rigidbodies in rb)
+           {
+               Rigidbodies.useGravity = true;
+           }
+
+           if (mr != null)
+           {
+               mr.materials[1].SetFloat("_alpha", 0);
+           }
+           
            if (anim != null)
            {
                anim.enabled = false;
