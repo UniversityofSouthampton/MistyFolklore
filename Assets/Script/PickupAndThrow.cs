@@ -14,9 +14,11 @@ public class PickupAndThrow : MonoBehaviour
     private float distance;
 
     private TempParent tempParent;
+    private Enemy enemy_script;
 
     private Rigidbody[] rb;
     private Rigidbody temp_rigid;
+    private Collider temp_collider;
     RaycastHit hit;
     public LayerMask obj_mask;
 
@@ -48,9 +50,13 @@ public class PickupAndThrow : MonoBehaviour
         {
             PickingUp();
         }
-        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, maxDistance, obj_mask) )
+        if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out hit, maxDistance, obj_mask) && !isHolding )
         {
-            
+            if (hit.collider.gameObject.tag == "Enemy")
+            {
+                enemy_script = hit.collider.gameObject.GetComponent<Enemy>();
+                
+            }
             mr = hit.collider.gameObject.GetComponent<MeshRenderer>();
             if (mr != null)
             {
@@ -59,8 +65,18 @@ public class PickupAndThrow : MonoBehaviour
             
             if( Input.GetMouseButtonDown(0))
             {
-                temp_rigid = hit.rigidbody;
-                rb = hit.collider.gameObject.GetComponentsInChildren<Rigidbody>();
+                if (enemy_script != null)
+                {
+                     enemy_script.RagdollModeOn();
+                     temp_rigid = enemy_script.GetHitRigid(hit.point);
+                     
+                }
+                else{
+                    temp_rigid = hit.rigidbody;
+                }
+                
+                //rb = hit.collider.gameObject.GetComponentsInChildren<Rigidbody>();
+                temp_collider = hit.collider;
                 pickup_obj = hit.collider.gameObject;
                 isHolding = true;
                 pickup = true;
@@ -94,26 +110,26 @@ public class PickupAndThrow : MonoBehaviour
 
     void PickingUp()
     {
-        foreach (var Rigidbodies in rb )
-        {
-            Rigidbodies.useGravity = false;
-            Rigidbodies.detectCollisions = true;
-        }
+        //foreach (var Rigidbodies in rb )
+        //{
+            temp_rigid.useGravity = false;
+            temp_rigid.detectCollisions = true;
+            temp_rigid.isKinematic = true;
+        //}
          
          pickup_obj.transform.SetParent(tempParent.transform);
+         temp_collider.isTrigger = true;
          //Hold();
     }
     private void Hold()
     {
-        foreach (var Rigidbodies in rb)
-        {
-            Rigidbodies.velocity = Vector3.zero;
-            Rigidbodies.angularVelocity = Vector3.zero;
-        }
-
+        //foreach (var Rigidbodies in rb)
+        //{
+            
+        //}
+        temp_rigid.velocity = Vector3.zero;
+        temp_rigid.angularVelocity = Vector3.zero;
         //temp_rigid.constraints = RigidbodyConstraints.FreezePositionY;
-        
-
         if (mr != null)
         {
             mr.materials[1].SetFloat("_alpha", 1);
@@ -145,7 +161,7 @@ public class PickupAndThrow : MonoBehaviour
             {
                 
                 anim.enabled = true;
-                StartCoroutine(Delay());
+                //StartCoroutine(Delay());
             }
         }
        
@@ -178,11 +194,12 @@ public class PickupAndThrow : MonoBehaviour
            objectPos = pickup_obj.transform.position;
            pickup_obj.transform.position = objectPos;
            pickup_obj.transform.SetParent(null);
-           foreach (var Rigidbodies in rb)
-           {
-               Rigidbodies.useGravity = true;
-           }
-
+           //foreach (var Rigidbodies in rb)
+           //{
+               temp_rigid.useGravity = true;
+               temp_rigid.isKinematic = false;
+               temp_collider.isTrigger = false;
+           //}
            if (mr != null)
            {
                mr.materials[1].SetFloat("_alpha", 0);
@@ -191,8 +208,7 @@ public class PickupAndThrow : MonoBehaviour
            if (anim != null)
            {
                anim.enabled = false;
-           }
-           
+           }  
        }
            
             

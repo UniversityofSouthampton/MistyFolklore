@@ -1,5 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Phoenix3D/UpgradeRenderPipeline/Upgrade_HDRP.unitypackage.meta
 guid: 88e52e8255b8c6a458a7f14828589715
+========
+guid: cc4a9f525a0bac2489d25c1014bea4a1
+folderAsset: yes
+>>>>>>>> ec5ed2fc217abca069a223c19d75c9cec006389c:Assets/DevLocker.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

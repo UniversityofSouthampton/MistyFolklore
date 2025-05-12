@@ -1,5 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Phoenix3D/UpgradeRenderPipeline/Upgrade_SRP.unitypackage.meta
 guid: dfbb477c16c0cfa4dba2be603a07bb6b
+========
+guid: 80dca38a36727f448931a1c000a24c5c
+folderAsset: yes
+>>>>>>>> ec5ed2fc217abca069a223c19d75c9cec006389c:Assets/DevLocker/CameraUtils.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

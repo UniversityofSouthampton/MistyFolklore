@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Timeslow : MonoBehaviour
 {
-    public float slowdownFactor = 0.2f;
+   // public float slowdownFactor = 0.2f;
 
     public float slowdownLength;
     public ParticleSystem rain;
@@ -24,7 +24,7 @@ public class Timeslow : MonoBehaviour
         
     }
 
-    public void DoSlowmotion()
+    public void DoSlowmotion(float slowdownFactor)
     {
         //int numParticlesAlive = rain.GetParticles(m_Particles);
         //for (int i = 0; i < numParticlesAlive; i++)

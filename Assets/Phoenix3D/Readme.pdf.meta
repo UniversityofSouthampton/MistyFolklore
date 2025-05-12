@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Phoenix3D/Readme.pdf.meta
 guid: 805fd4a979cc23543b50b17a834cc506
+========
+guid: d98a3c5e1ab12c04eb498ad54e3e961c
+>>>>>>>> ec5ed2fc217abca069a223c19d75c9cec006389c:Assets/DevLocker/_Examples/Physics/RagdollTestScene.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
