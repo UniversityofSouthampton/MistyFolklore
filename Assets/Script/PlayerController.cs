@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public float slowRate = 0.01f;
+    
     public float speed  = 2;
     public float gravity = -9.81f;
     private bool isGrounded;
@@ -13,7 +15,7 @@ public class PlayerController : MonoBehaviour
     float vertical;
     Vector3 velocity;
     public float jumpHeight;
-    bool timeChange = true;
+    public static bool timeChange = true;
     public Timeslow timeslow;
     /// Audio
     public AudioSource rain_sound;
@@ -35,12 +37,19 @@ public class PlayerController : MonoBehaviour
             if (timeChange == false)
             {
                 SlowDownTime();
+                slowtime_sound.Play();
             
             }
             else {
                 NormalTime();
-                
+                slowtime_sound.Pause();
             }
+        }
+        if (Input.GetAxisRaw("Mouse ScrollWheel") > 0 && slowRate < 0.2f && timeChange == false || Input.GetAxisRaw("Mouse ScrollWheel") < 0 && slowRate > 0.01f && timeChange == false)
+        {
+                 slowRate += Input.GetAxisRaw("Mouse ScrollWheel") * 0.02f;
+                 SlowDownTime();
+           
         }
         if (timeChange == false && Input.GetKey(KeyCode.I))
         {
@@ -86,15 +95,15 @@ public class PlayerController : MonoBehaviour
     public void SlowDownTime()
     {
         
-        timeslow.DoSlowmotion();
-        slowtime_sound.Play();
+        timeslow.DoSlowmotion(slowRate);
+        
     }
 
     public void NormalTime()
     {
         
         timeslow.TurnBack();
-        slowtime_sound.Pause();
+
     }
 
    
