@@ -30,7 +30,7 @@ public class Enemy : MonoBehaviour
     public bool playerInSightRange, playerInAttackRange;
     bool dead = false;
 
-    //public Animator thisguyAnimator;
+    public Animator thisguyAnimator;
     private void Awake()
     {
         player = GameObject.Find("Player").transform;
@@ -109,7 +109,7 @@ public class Enemy : MonoBehaviour
             col.enabled = false;
         }
 
-        //thisguyAnimator.enabled = true;
+        thisguyAnimator.enabled = true;
         bigCollider.enabled = true;
         GetComponent<Rigidbody>().isKinematic = false;
     }
@@ -126,7 +126,7 @@ public class Enemy : MonoBehaviour
             col.enabled = true;
         }
 
-        //thisguyAnimator.enabled = false;
+        thisguyAnimator.enabled = false;
         bigCollider.enabled = false;
         GetComponent<Rigidbody>().isKinematic = true;
         GetComponent<Rigidbody>().useGravity = false;

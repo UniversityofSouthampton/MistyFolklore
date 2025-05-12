@@ -114,7 +114,7 @@ public class PickupAndThrow : MonoBehaviour
         //{
             temp_rigid.useGravity = false;
             temp_rigid.detectCollisions = true;
-            temp_rigid.isKinematic = true;
+            
         //}
          
          pickup_obj.transform.SetParent(tempParent.transform);
@@ -129,6 +129,7 @@ public class PickupAndThrow : MonoBehaviour
         //}
         temp_rigid.velocity = Vector3.zero;
         temp_rigid.angularVelocity = Vector3.zero;
+        temp_rigid.isKinematic = true;
         //temp_rigid.constraints = RigidbodyConstraints.FreezePositionY;
         if (mr != null)
         {
