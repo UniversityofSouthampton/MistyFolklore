@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
+using Random = UnityEngine.Random;
 
 public class Enemy : MonoBehaviour
 {
@@ -20,7 +21,7 @@ public class Enemy : MonoBehaviour
     bool walkPointSet;
     public float walkPointRange;
     // Attacking
-    public float TimeBetweenAttacks;
+    public float TimeBetweenAttacks ;
     bool alreadyAttacked;
     public GameObject arrow;
     public Transform spawnPoint;
@@ -75,19 +76,21 @@ public class Enemy : MonoBehaviour
         
         if (!alreadyAttacked)
         {
+             StartCoroutine(ResetAttack());
             // Attack code
             Rigidbody rb_arrow = Instantiate(arrow, spawnPoint.position, spawnPoint.rotation).GetComponent<Rigidbody>();
             rb_arrow.AddForce(transform.forward * shootForce * 1/Time.timeScale, ForceMode.Impulse);
             rb_arrow.AddForce(transform.up * upForce * 1/Time.timeScale, ForceMode.Impulse);
 
             alreadyAttacked = true;
-            StartCoroutine(ResetAttack());
+           
         }
 
     }
 
     IEnumerator ResetAttack()
     {
+        TimeBetweenAttacks = Random.Range(4, 8);
         yield return new WaitForSeconds (TimeBetweenAttacks);
         alreadyAttacked = false;
     }
@@ -110,7 +113,7 @@ public class Enemy : MonoBehaviour
             col.enabled = false;
         }
 
-        thisguyAnimator.enabled = true;
+        //thisguyAnimator.enabled = true;
         bigCollider.enabled = true;
         GetComponent<Rigidbody>().isKinematic = false;
     }

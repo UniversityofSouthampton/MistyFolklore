@@ -6,11 +6,14 @@ public class Arrow : MonoBehaviour
 {
     //public Transform prefArrow;
     private Enemy enmy_script;
+
+    private Rigidbody rb_arrow;
     // Start is called before the first frame update
     
     void Awake()
     {
         //prefArrow = this.transform.parent;
+         rb_arrow = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -26,8 +29,7 @@ public class Arrow : MonoBehaviour
             this.transform.SetParent(other.gameObject.transform);
             enmy_script = other.gameObject.GetComponent<Enemy>();
             enmy_script.RagdollModeOn();
-            //Rigidbody rb_arrow = prefArrow.GetComponent<Rigidbody>();
-            //rb_arrow.isKinematic = true;
+            rb_arrow.isKinematic = true;
         }
     }
 }
