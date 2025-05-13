@@ -169,8 +169,17 @@ public class PickupAndThrow : MonoBehaviour
         if (Input.GetMouseButtonDown(1))
         {
             //throw
-            Drop();
-            temp_rigid.AddForce(tempParent.transform.forward * throwForce * 1/Time.timeScale, ForceMode.Force);
+            if(pickup_obj.tag == "Arrow")
+            {
+                Drop();
+                pickup_obj.transform.forward = tempParent.transform.forward;
+                 temp_rigid.AddForce(tempParent.transform.forward * throwForce * 1/Time.timeScale, ForceMode.Force);
+            }
+            else{
+                 Drop();
+                 temp_rigid.AddForce(tempParent.transform.forward * throwForce * 1/Time.timeScale, ForceMode.Force);
+            }
+           
             
         }
 
@@ -199,7 +208,11 @@ public class PickupAndThrow : MonoBehaviour
            //{
                temp_rigid.useGravity = true;
                temp_rigid.isKinematic = false;
-               temp_collider.isTrigger = false;
+               if(pickup_obj.tag != "Arrow")
+               {
+                   temp_collider.isTrigger = false;
+               }
+               
            //}
            if (mr != null)
            {

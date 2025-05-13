@@ -24,7 +24,7 @@ public class Enemy : MonoBehaviour
     bool alreadyAttacked;
     public GameObject arrow;
     public Transform spawnPoint;
-    public float shootForce;
+    public float shootForce , upForce;
     //States
     public float sightRange,attackRange;
     public bool playerInSightRange, playerInAttackRange;
@@ -45,7 +45,7 @@ public class Enemy : MonoBehaviour
         // Check for sight and attack range
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
-        /*if (dead == false)
+        if (dead == false)
         {
            if (!playerInAttackRange)
            {
@@ -55,7 +55,7 @@ public class Enemy : MonoBehaviour
                AttackPlayer();
            }
             
-        }*/
+        }
        
        
     }
@@ -77,7 +77,8 @@ public class Enemy : MonoBehaviour
         {
             // Attack code
             Rigidbody rb_arrow = Instantiate(arrow, spawnPoint.position, spawnPoint.rotation).GetComponent<Rigidbody>();
-            rb_arrow.AddForce(transform.forward * shootForce * 1/Time.timeScale, ForceMode.Force);
+            rb_arrow.AddForce(transform.forward * shootForce * 1/Time.timeScale, ForceMode.Impulse);
+            rb_arrow.AddForce(transform.up * upForce * 1/Time.timeScale, ForceMode.Impulse);
 
             alreadyAttacked = true;
             StartCoroutine(ResetAttack());
@@ -139,7 +140,17 @@ public class Enemy : MonoBehaviour
         {
             RagdollModeOn();
         }
+
     }
+    void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.tag == "Arrow")
+        {
+            other.gameObject.transform.SetParent(this.gameObject.transform);
+            RagdollModeOn();
+        }
+    }
+  
 
     public Rigidbody GetHitRigid(Vector3 hitpoint)
     {
