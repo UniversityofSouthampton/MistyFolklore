@@ -63,11 +63,13 @@ public class Enemy : MonoBehaviour
 
     void ChasePlayer()
     {
+        thisguyAnimator.SetBool("Shooting", false);
         agent.SetDestination(player.position);
     }
 
     void AttackPlayer()
     {
+        thisguyAnimator.SetBool("Shooting", true);
         agent.SetDestination(transform.position);
         if (PlayerController.timeChange == true)
         {
@@ -149,8 +151,15 @@ public class Enemy : MonoBehaviour
     {
         if(other.gameObject.tag == "Arrow")
         {
-            other.gameObject.transform.SetParent(this.gameObject.transform);
-            RagdollModeOn();
+            Arrow arrow_Script = other.gameObject.GetComponent<Arrow>();
+            if (arrow_Script.already_throw == true)
+            {
+                other.gameObject.transform.SetParent(this.gameObject.transform);
+                RagdollModeOn();
+                Rigidbody rb = other.gameObject.GetComponent<Rigidbody>();
+                rb.isKinematic = true;
+            }
+            
         }
     }
   

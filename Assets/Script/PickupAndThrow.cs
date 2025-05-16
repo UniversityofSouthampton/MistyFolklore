@@ -173,7 +173,9 @@ public class PickupAndThrow : MonoBehaviour
             {
                 Drop();
                 pickup_obj.transform.forward = tempParent.transform.forward;
-                 temp_rigid.AddForce(tempParent.transform.forward * throwForce * 1/Time.timeScale, ForceMode.Force);
+                Arrow arrow_script = pickup_obj.GetComponent<Arrow>();
+                arrow_script.already_throw = true;
+                temp_rigid.AddForce(tempParent.transform.forward * throwForce * 1/Time.timeScale, ForceMode.Force);
             }
             else{
                  Drop();

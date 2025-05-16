@@ -6,8 +6,9 @@ public class Arrow : MonoBehaviour
 {
     //public Transform prefArrow;
     private Enemy enmy_script;
-
     private Rigidbody rb_arrow;
+
+    public bool already_throw = false;
     // Start is called before the first frame update
     
     void Awake()
@@ -24,7 +25,7 @@ public class Arrow : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Enemy")
+        if (other.gameObject.tag == "Enemy" && already_throw == true) 
         {
             this.transform.SetParent(other.gameObject.transform);
             enmy_script = other.gameObject.GetComponent<Enemy>();
