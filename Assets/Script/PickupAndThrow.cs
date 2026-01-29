@@ -127,7 +127,7 @@ public class PickupAndThrow : MonoBehaviour
         //{
             
         //}
-        temp_rigid.velocity = Vector3.zero;
+        temp_rigid.linearVelocity = Vector3.zero;
         temp_rigid.angularVelocity = Vector3.zero;
         temp_rigid.isKinematic = true;
         //temp_rigid.constraints = RigidbodyConstraints.FreezePositionY;

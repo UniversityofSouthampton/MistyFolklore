@@ -76,7 +76,7 @@ public class Pickup : MonoBehaviour
 
     private void Hold()
     {
-        rb.velocity = Vector3.zero;
+        rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
 
         if (Input.GetKey(KeyCode.E))

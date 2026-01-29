@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
+            Debug.Log(timeChange);
             timeChange = !timeChange;
             if (timeChange == false)
             {
@@ -72,7 +73,7 @@ public class PlayerController : MonoBehaviour
     {
        
         isGrounded = Physics.Raycast(player.position, Vector3.down, 0.25f,Ground | jump_obj);
-        Debug.Log(isGrounded);
+       // Debug.Log(isGrounded);
         var characterController = GetComponent<CharacterController>();
         //Vector3 velocity = Vector3.zero;
         horizontal = Input.GetAxisRaw("Horizontal");

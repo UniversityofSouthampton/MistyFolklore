@@ -83,9 +83,8 @@ public class Enemy : MonoBehaviour
             Rigidbody rb_arrow = Instantiate(arrow, spawnPoint.position, spawnPoint.rotation).GetComponent<Rigidbody>();
             rb_arrow.AddForce(transform.forward * shootForce * 1/Time.timeScale, ForceMode.Impulse);
             rb_arrow.AddForce(transform.up * upForce * 1/Time.timeScale, ForceMode.Impulse);
-
             alreadyAttacked = true;
-           
+            
         }
 
     }
@@ -117,7 +116,7 @@ public class Enemy : MonoBehaviour
 
         //thisguyAnimator.enabled = true;
         bigCollider.enabled = true;
-        GetComponent<Rigidbody>().isKinematic = false;
+        //GetComponent<Rigidbody>().isKinematic = false;
     }
 
     public void RagdollModeOn()
